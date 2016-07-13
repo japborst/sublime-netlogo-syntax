@@ -1,0 +1,45 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: NetLogo
+file_extensions:
+  - nlogo
+scope: source.nlogo
+contexts:
+  main:
+    - match: \b(if|ifelse)\b
+      scope: keyword.control.nlogo
+
+    - match: \b(to|end|ask|let|show|set(xy)?|any|count|stamp|die|tick(-advance)?|(create|move|setup)?-turtles|sprout|clear(-all|-ticks)|move-to|fd|reset(-ticks)?|ca|with|in-radius|at-points|right|left|forward)\b
+      scope: support.function.nlogo
+
+    - match: (?<=(to)) [\w-]+
+      scope: entity.name.function.nlogo
+
+    - match: \b[\w-]+(?=\[)
+      scope: entity.name.nlogo
+
+    - match: \b[0-9]+\b
+      scope: constant.numeric.nlogo
+
+    - match: (\+|\*|-|\/)
+      scope: keyword.operator.nlogo
+
+    - match: \s(or|and|mod|of|not)\s(not)?
+      scope: keyword.operator.nlogo
+
+    - match: ;(.*)
+      scope: comment.line.character.nlogo
+
+    - match: (?<=(set|ask)) [\w-]+
+      scope: variable.parameter.nlogo
+
+    - match: '"'
+      push: string
+
+  string:
+    - meta_scope: string.quoted.double.nlogo
+    - match: \\.
+      scope: constant.character.escape.nlogo
+    - match: '"'
+      pop: true
