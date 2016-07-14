@@ -7,39 +7,72 @@ file_extensions:
 scope: source.nlogo
 contexts:
   main:
-    - match: \b(if|ifelse)\b
-      scope: keyword.control.nlogo
+    # Control operators
+    - match: \b(if|ifelse|while|foreach)\b
+      scope: keyword.control.flow.nlogo
 
-    - match: \b(to|end|ask|let|show|set(xy)?|any|count|stamp|die|tick(-advance)?|(create|move|setup)?-turtles|sprout|clear(-all|-ticks)|move-to|fd|reset(-ticks)?|ca|with|in-radius|at-points|right|left|forward)\b
+    # Methods
+    - match: \b(end|ask(-concurrent)?|let|show|set(xy)?|any|repeat|count|stamp|die|tick(-advance)?|(create|move|setup)?-turtles|sprout|clear(-all|-ticks)|will-stop|move-to|reset(-ticks)?|right|left|forward|back|jump|mean)\b
       scope: support.function.nlogo
 
-    - match: (?<=(to)) [\w-]+
-      scope: entity.name.function.nlogo
+    # Abbreviated methods
+    - match: \b(rt|lt|fd|bk|ca|crt)\b
+      scope: support.function.nlogo
+    
+    # Method names
+    - match: \bto(-report)?\b\s
+      push: def
 
-    - match: \b[\w-]+(?=\[)
+    # Function parameters
+    - match: (?<=(set|ask)) [\w-]+
+      scope: variable.parameter.nlogo
+    
+    # Entities
+    - match: \w+-(own)|(globals|breed|extensions)
       scope: entity.name.nlogo
 
-    - match: \b[0-9]+\b
-      scope: constant.numeric.nlogo
+    # Numerics
+    - match: \b\d+
+      push: num
 
-    - match: (\+|\*|-|\/)
+    # Math operators
+    - match: ([+*\-/^><=]|!=|mod)
       scope: keyword.operator.nlogo
 
-    - match: \s(or|and|mod|of|not)\s(not)?
+    # Logical operators
+    - match: \s(and|or|xor|of|not|with|at-points|in-radius|in-cone)\s(not)?
       scope: keyword.operator.nlogo
 
+    - match: \b(true|false)\b
+      scope: constant.language.nlogo
+
+    # One line comments
     - match: ;(.*)
       scope: comment.line.character.nlogo
 
-    - match: (?<=(set|ask)) [\w-]+
-      scope: variable.parameter.nlogo
-
+    # Double quoted strings
     - match: '"'
       push: string
 
+  # String specification
   string:
     - meta_scope: string.quoted.double.nlogo
     - match: \\.
       scope: constant.character.escape.nlogo
     - match: '"'
+      pop: true
+
+  # Method specification
+  def:
+    - meta_scope: support.function.nlogo
+    - match: ([\w-_]+)
+      scope: entity.name.function.nlogo
+      pop: true
+
+  # Number specification
+  num:
+    - meta_scope: constant.numeric.nlogo
+    - match: E|e
+      scope: keyword.operator.nlogo
+    - match: \b
       pop: true
