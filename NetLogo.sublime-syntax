@@ -36,7 +36,7 @@ contexts:
       push: num
 
     # Math operators
-    - match: ([+*\-/^><=]|!=|mod)
+    - match: ([\+\*\-\/\^><=]|!=|mod)
       scope: keyword.operator.nlogo
 
     # Logical operators
@@ -65,7 +65,7 @@ contexts:
   # Method specification
   def:
     - meta_scope: support.function.nlogo
-    - match: ([\w-_]+)
+    - match: ([\w\d_\.\?=\*!<>:#\+/%\$\^\'&\-]+)
       scope: entity.name.function.nlogo
       pop: true
 
