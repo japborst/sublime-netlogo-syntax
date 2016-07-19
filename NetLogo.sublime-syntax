@@ -8,11 +8,11 @@ scope: source.nlogo
 contexts:
   main:
     # Control operators
-    - match: \b(if|ifelse|while|foreach)\b
+    - match: \b(if|ifelse(-value)?|while|foreach)\b
       scope: keyword.control.flow.nlogo
 
     # Methods
-    - match: \b(end|ask(-concurrent)?|let|show|set(xy)?|any|repeat|count|stamp|die|tick(-advance)?|(create|move|setup)?-turtles|sprout|clear(-all|-ticks)|will-stop|move-to|reset(-ticks)?|right|left|forward|back|jump|mean)\b
+    - match: \b(end|show|report|any|repeat|count|stamp|die|tick(-advance)?|(create|move|setup)?-turtles|sprout|clear(-all|-ticks)|will-stop|setxy|move-to|reset(-ticks)?|right|left|forward|back|jump|mean)\b
       scope: support.function.nlogo
 
     # Abbreviated methods
@@ -24,7 +24,10 @@ contexts:
       push: def
 
     # Function parameters
-    - match: (?<=(set|ask)) [\w-]+
+    - match: \b(let|set|ask(-concurrent)?)\b\s
+      push: param
+
+    - match: \b(pxcor|pycor)\b
       scope: variable.parameter.nlogo
     
     # Entities
@@ -36,7 +39,7 @@ contexts:
       push: num
 
     # Math operators
-    - match: ([\+\*\-\/\^><=]|!=|mod)
+    - match: ([\+\*\-\/\^><=]|!=|mod|abs|a?(cos|tan|sin))
       scope: keyword.operator.nlogo
 
     # Logical operators
@@ -45,6 +48,10 @@ contexts:
 
     - match: \b(true|false)\b
       scope: constant.language.nlogo
+    
+    # Predefined colours
+    - match: \b(black|gray|white|red|orange|brown|yellow|green|lime|turquoise|cyan|sky|blue|violet|magenta|pink)\b
+      scope: constant.other.nlogo
 
     # One line comments
     - match: ;(.*)
@@ -75,4 +82,10 @@ contexts:
     - match: E|e
       scope: keyword.operator.nlogo
     - match: \b
+      pop: true
+
+  param:
+    - meta_scope: support.function.nlogo
+    - match: ([\w\d_\.\?=\*!<>:#\+/%\$\^\'&\-]+)
+      scope: variable.parameter.nlogo
       pop: true
